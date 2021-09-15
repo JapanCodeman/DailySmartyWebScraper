@@ -24,11 +24,27 @@ import lxml
 source = requests.get('http://www.dailysmarty.com/topics/python').text
 
 soup = bs.BeautifulSoup(source, 'lxml')
-body = soup.body
 
-post_item = soup.find_all('a', class_='post-link-title')
+tags = soup.find_all('a', href=True)
 
-post = post_item
-print(post)
+all_tags = []
+card_titles = []
+test_list = []
 
-links = []
+for tag in tags:
+    all_tags.append(tag['href'])
+
+
+def clean_up_tag(tag):
+    if tag[0:7] == '/posts/':
+        card_titles.append(tag[7:])
+
+
+for tag in all_tags:
+    clean_up_tag(tag)
+
+
+for i in card_titles:
+    print(inflection.titleize(i))
+
+
